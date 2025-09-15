@@ -16,7 +16,6 @@
 - [Conclusion](#conclusion)
 - [Contact](#contact)
 
-# Trade and Customs Data Analysis Project
 
 ## Project Overview
 
