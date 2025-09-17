@@ -123,6 +123,49 @@ sns.heatmap(corr, annot=True, cmap="coolwarm")
 plt.title("Correlation between Trade Values and Tax")
 plt.show()
 
+"""#### scatter plot CIF vs tax"""
+
+plt.figure(figsize=(7,5))
+plt.scatter(df["CIF_value($)"], df["Total_Tax($)"], alpha=0.5)
+
+"""# Add trendline"""
+z = np.polyfit(df["CIF_value($)"], df["Total_Tax($)"], 1)
+p = np.poly1d(z)
+plt.plot(df["CIF_value($)"], p(df["CIF_value($)"]), "r--")
+
+plt.title("CIF Value vs Total Tax")
+plt.xlabel("CIF Value ($)")
+plt.ylabel("Total Tax ($)")
+plt.show()
+
+"""#correlation"""
+df["CIF_value($)"].corr(df["Total_Tax($)"])
+
+"""#### calculate preprocessing days"""
+
+df["Processing_Days"] = (df["Receipt_date"] - df["Reg_date"]).dt.days
+df["Processing_Days"].mean(), (df["Processing_Days"] > 7).mean() * 100
+
+"""#### visualize preprocessing days"""
+plt.figure(figsize=(8,5))
+plt.hist(df["Processing_days"], bins=20, color="skyblue", edgecolor="black")
+plt.axvline(7, color="red", linestyle="dashed", linewidth=2, label="SLA: 7 days")
+plt.title("Distribution of Processing Days")
+plt.xlabel("Processing Days")
+plt.ylabel("Frequency")
+plt.legend()
+plt.show()
+
+""" SLA and visualize"""
+sla_exceed = (df["Processing_days"] > 7).mean() * 100
+
+plt.figure(figsize=(5,5))
+plt.bar(["On-time", "Delayed"], [100 - sla_exceed, sla_exceed], color=["green", "red"])
+plt.title("Proportion of Transactions Exceeding SLA")
+plt.ylabel("Percentage (%)")
+plt.show()
+
+
 """#### Seasonality (monthly trend)
 
 """
@@ -138,6 +181,7 @@ plt.title("Monthly Trade Volumes Over Years")
 plt.xlabel("Month")
 plt.ylabel("Total CIF Value")
 plt.show()
+
 
 """## 8. Save Outputs
 
